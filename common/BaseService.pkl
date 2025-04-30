@@ -1,0 +1,32 @@
+component BaseService {
+  name: String
+  image: String
+  replicas: Int = 1
+  port: Int = 8080
+
+  ingress?: {
+    host: String
+    tls: Boolean
+    path: String = "/"
+  }
+
+  env: Map<String, String> = {}
+  secrets: Map<String, String> = {}
+
+  monitoring?: {
+    path: String = "/metrics"
+    labels: Map<String, String>
+    slo: {
+      availability: String
+      latencyThresholdMs: Int
+    }
+  }
+
+  documentation?: {
+    openapiSpecUrl: String
+    description: String
+  }
+
+  toYaml(): String = renderAsK8s(self)
+}
+
